@@ -6,20 +6,50 @@
   <meta name="mobile-web-app-capable" content="yes">
   <title>SamRox Media Screens</title>  
 
-  <script src="cordova.js"></script>    
+  <script src="cordova.js"></script>  
 
 </head>
 <body>
-<!-- <a href="http://www.samrox.co.nz/mediascreen/">Connect to media screen</a> -->
-Connecting...
-</body>
-<script type="text/javascript" charset="utf-8">
-  //document.addEventListener("deviceready", onDeviceReady, false);
+ Connecting...
+<script>
+ document.addEventListener("deviceready", onDeviceReady, false);
+
+  checkConnection();
   
-  function onDeviceReady() {
-    //pictureSource=navigator.camera.PictureSourceType;
-    //destinationType=navigator.camera.DestinationType;
+  function checkConnection() {
+  
+    var networkState = navigator.network.connection.type;
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.NONE]     = 'No network connection';
+    
+    go_to_media_server();
+    
+}
+  function go_to_media_server () {
+  
+	if (states[networkState] != 'WiFi') {
+		document.write('Dont have WIFI, trying in 1 minute');
+		window.setInterval(function(){
+		  checkConnection();
+		}, 6000);
+
+	} else window.location = 'http://www.samrox.co.nz/video/';
+  
   }
-  window.location = 'http://www.samrox.co.nz/video/';
+  
 </script>
+
+
+<!-- <a href="http://www.samrox.co.nz/mediascreen/">Connect to media screen</a> -->
+
+
+
+</body>
+
 </html>

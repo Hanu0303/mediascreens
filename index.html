@@ -6,48 +6,31 @@
   <meta name="mobile-web-app-capable" content="yes">
   <title>SamRox Media Screens</title>  
 
+  <script src="jquery-1.10.1.js"></script>
   <script src="cordova.js"></script>  
 
 </head>
-<body>
- Connecting...
+<body onload="checkNetConnection();">
+ 	loading...
 <script>
- //document.addEventListener("deviceready", onDeviceReady, false);
-
-  checkConnection();
   
-  function checkConnection() {
-  
-    var networkState = navigator.network.connection.type;
-    var states = {};
-    states[Connection.UNKNOWN]  = 'Unknown connection';
-    states[Connection.ETHERNET] = 'Ethernet connection';
-    states[Connection.WIFI]     = 'WiFi';
-    states[Connection.CELL_2G]  = 'Cell 2G connection';
-    states[Connection.CELL_3G]  = 'Cell 3G connection';
-    states[Connection.CELL_4G]  = 'Cell 4G connection';
-    states[Connection.NONE]     = 'No network connection';
-    
-    go_to_media_server();
-    
-}
-  function go_to_media_server () {
-  
-	if (states[networkState] != 'WiFi') {
-		document.write('Dont have WIFI, trying in 1 minute');
-		window.setInterval(function(){
-		  checkConnection();
+function checkNetConnection(){
+ jQuery.ajaxSetup({async:false});
+ re="";
+ r=Math.round(Math.random() * 10000);
+ $.get("http://www.samrox.co.nz/mediascreen/empty.png",{subins:r},function(d){
+  re=true;
+  window.location = 'http://www.samrox.co.nz/mediascreen/';
+ }).error(function(){
+ 	document.write("No internet connection, retrying in 60 seconds...");
+ 	window.setInterval(function(){
+		  checkNetConnection();
 		}, 6000);
-
-	} else window.location = 'http://www.samrox.co.nz/video/';
-  
-  }
-  
+  re=false;
+ });
+ return re;
+}
 </script>
-
-
-<!-- <a href="http://www.samrox.co.nz/mediascreen/">Connect to media screen</a> -->
-
 
 
 </body>

@@ -7,30 +7,99 @@
   <title>SamRox Media Screens</title>  
 
   <script src="jquery-1.10.1.js"></script>
-  <script src="cordova.js"></script>  
+  <script src="cordovas.js"></script>  
 
 </head>
 <body onload="checkNetConnection();">
- 	loading...
+
+<style>
+body {
+	 margin:0;
+	 padding: 0px;
+	 background: #333;
+	 font-family: sans-serif;
+ }
+ 
+#frame_wrapper {
+	 display: block;
+	 position: absolute;
+	 z-index: 10;
+	 background: #333;
+	 width: 100%;
+	 height: 100%;
+}
+
+#message_wrapper {
+	 display: block;
+	 width:30%;
+	 height:20%;
+	 left:50%;
+	 margin-left:-15%;
+	 top:50%;
+	 margin-top:-10%;
+	 position: fixed;
+	 z-index: 1000;
+	 background: #333;
+	 opacity: 0.8;
+	 box-shadow: 0em 0em 0.5em 0.2em black;
+	 border-radius: 1em;
+}
+
+#loading {
+	 display: block;
+	 width:20%;
+	 position: relative;
+	 height: 25%;
+	 top:35%;
+	 left:5%;
+	 background: transparent url('ajax-loader.gif') 0.6em center no-repeat;
+	 float: left;
+}
+
+#message {
+	 display: block;
+	 width:75%;
+	 position: relative;
+	 height: 25%;
+	 top:35%;
+	 
+	 line-height: 3em;
+	 color:#eee;
+	 float: left;
+}
+ 
+</style>
 <script>
   
-function checkNetConnection(){
- jQuery.ajaxSetup({async:false});
- re="";
- r=Math.round(Math.random() * 10000);
- $.get("http://www.samrox.co.nz/mediascreen/empty.png",{subins:r},function(d){
-  re=true;
-  window.location = 'http://www.samrox.co.nz/mediascreen/';
- }).error(function(){
- 	document.write("No internet connection, retrying in 60 seconds...");
- 	window.setInterval(function(){
-		  checkNetConnection();
-		}, 6000);
-  re=false;
- });
- return re;
-}
+	function checkNetConnection(){
+		jQuery.ajaxSetup({async:false});
+		re="";
+		r=Math.round(Math.random() * 10000);
+		$.get("http://www.samrox.co.nz/mediascreen/empty.png",{subins:r},function(d){
+			re=true;
+			
+			$('#message_wrapper').fadeOut();
+			$('#frame_wrapper').html('<iframe src="http://www.samrox.co.nz/mediascreen/" style="border: 0; position:fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%">').fadeIn();
+		}).error(function(){
+			$('#message_wrapper').fadeIn();
+			$('#frame_wrapper').html('').fadeOut();
+			$('#message').html('No internet connection, retrying in 60 seconds...');
+			window.setInterval(function(){
+				checkNetConnection();
+		}, 60000);
+			re=false;
+		});
+		return re;
+	}
 </script>
+
+<div id="message_wrapper">
+	<div id="loading"></div>
+	<div id="message">Connecting...</div>
+</div>
+<div id="frame_wrapper">
+	
+</div>
 
 
 </body>
